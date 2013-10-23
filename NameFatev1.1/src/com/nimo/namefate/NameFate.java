@@ -23,7 +23,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
-import com.casee.adsdk.CaseeAdView;
+
+
 
 
 public class NameFate extends Activity {
@@ -34,7 +35,6 @@ public class NameFate extends Activity {
 	Button btn;
 	private final int FP = ViewGroup.LayoutParams.FILL_PARENT;
 	private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
-	CaseeAdView cav;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -162,55 +162,29 @@ public class NameFate extends Activity {
 
 	}
 
-	//加入广告加载方法
-	private CaseeAdView addCaseeViewAD(Activity activity) { 
 
-    	//创建广告条的容器 
-    	RelativeLayout relativeLayout = new RelativeLayout(this); 
-    	LayoutParams params = new LayoutParams( ViewGroup.LayoutParams.FILL_PARENT, 
-    	ViewGroup.LayoutParams.FILL_PARENT); 
-    	activity.addContentView(relativeLayout, params);
-    	
-    	cav = new CaseeAdView(activity, "7C9E4ED0A7E99152FD8E5DCE3B203273", 
-    			false, 10 * 1000,//正式发布为false 
-    			Color.BLACK, Color.WHITE, false); 
-    	params = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 
-    			                  ViewGroup.LayoutParams.WRAP_CONTENT); 
-    	// params.addRule(RelativeLayout.ALIGN_PARENT_TOP); 
-    	params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM); 
-    	relativeLayout.addView(cav, params); 
-    	return cav; 
-    }
 	
 	public void onStart() {
 		
-		if (cav != null) {
-			cav.onShown();
-		}
+
 		super.onStart();
 	}
 
 	public void onResume() {
 		
-		if (cav != null) {
-			cav.onShown();
-		}
+	
 		super.onResume();
 	}
 
 	public void onPause() {
 		
-		if (cav != null) {
-			cav.onUnshown();
-		}
+	
 		super.onPause();
 	}
 
 	public void onStop() {
 		
-		if (cav != null) {
-			cav.onUnshown();
-		}
+	
 		super.onStop();
 	}
 
