@@ -158,7 +158,7 @@ public class NameFate extends Activity {
 		setContentView(mainRL);
 
 		//加入广告加载方法
-		addCaseeViewAD(this);
+		//addCaseeViewAD(this);
 
 	}
 

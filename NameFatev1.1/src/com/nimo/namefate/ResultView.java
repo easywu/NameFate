@@ -100,7 +100,7 @@ public class ResultView extends Activity {
                                      });}
 	          }, 0, 100); 
 		
-		addCaseeViewAD(this);
+		//addCaseeViewAD(this);
         
     }
     
