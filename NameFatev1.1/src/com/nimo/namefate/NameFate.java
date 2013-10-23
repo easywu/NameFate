@@ -1,4 +1,5 @@
 package com.nimo.namefate;
+//这是Namefate的第二个版本。
 
 import android.app.Activity;
 import android.app.AlertDialog;
