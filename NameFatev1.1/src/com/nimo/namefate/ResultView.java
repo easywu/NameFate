@@ -21,7 +21,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,14 +31,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class ResultView extends Activity {
 	ShowView sv;
@@ -122,9 +119,7 @@ public class ResultView extends Activity {
                                      });}
 	          }, 0, 100); 
 		
-		//addCaseeViewAD(this);
-        
-    }
+   }
     
     /*
      * 计算两个姓名缘分值的方法
@@ -171,12 +166,10 @@ public class ResultView extends Activity {
     
     @Override
     public void onStop(){//按下返回键时就会执行该回调函数，停止Timer。
-    	
     	super.onStop();
     	t.cancel();
     	//t.purge();
-    	
-    }
+     }
     
 	public void onStart() {
 		super.onStart();
@@ -188,11 +181,9 @@ public class ResultView extends Activity {
     
     @Override
     public void onPause(){//按下房屋键时会执行该回调函数。停止Timer。
-    	
     	super.onStop();
     	t.cancel();
     	//t.purge();
-    	
     }
     
 	
@@ -228,40 +219,27 @@ public class ResultView extends Activity {
 	         }
 	         });
 	      dialog.show();
-
-
-	 
-
-
 	   break;
 	   
 	  case R.id.share:
 	   //启动分享
-	   
 	   mWeibo=Weibo.getInstance("3200369891", "http://www.weibo.com");
 	   mWeibo.authorize(ResultView.this, new AuthDialogListener());
 	   StatusesAPI api = new StatusesAPI(ResultView.accessToken);
 	   api.update("测试微博", "90.00", "90.00", new RequestListener(){
-	    
 	    @Override
 	    public void onIOException(IOException arg0){
-	     
 	    }
-	    
 	    @Override
 	    public void onError(WeiboException arg0){
-	     
 	    }
 	    
 	    @Override
 	    public void onComplete(String arg0){
-	     
 	    }
 	   });
 	   
-	   System.out.println("here 1！！！！！！！！！！！！！！！！！！！");
 	   saveToSD();
-	   System.out.println("here 2！！！！！！！！！！！！！！！！！！！");
 	   break;
 
 		}
@@ -297,13 +275,8 @@ public class ResultView extends Activity {
 		       // 判SD卡是否存在 
 		       System.out.println("status is : "+Environment.MEDIA_MOUNTED);
 		       if (status.equals(Environment.MEDIA_MOUNTED)) { 
-		        
-		    
-		        
-		         
-		           File file = new File(Environment.getExternalStorageDirectory(),"testfile.png"); 
+                   File file = new File(Environment.getExternalStorageDirectory(),"testfile.png"); 
 		           System.out.println("Environment is : "+ Environment.getExternalStorageDirectory());
-		           
 		           // 判断文件A是否存在 
 		           //if (file.exists()) { 
 		               //String pic_path ="文件夹名" +"图片名"+".png"; 
@@ -322,14 +295,8 @@ public class ResultView extends Activity {
 		       e.printStackTrace(); 
 		   } 
 		  }  
-		 
 	
 	 class AuthDialogListener implements WeiboAuthListener {
-
-
-		 
-
-
 	        @Override
 	        public void onComplete(Bundle values) {
 	            String token = values.getString("access_token");
@@ -354,11 +321,6 @@ public class ResultView extends Activity {
 	                } catch (ClassNotFoundException e) {
 	                    // e.printStackTrace();
 	                    Log.i(TAG, "com.weibo.sdk.android.api.WeiboAPI not found");
-
-
-	 
-
-
 	                }
 	               // cancelBtn.setVisibility(View.VISIBLE);
 	               // AccessTokenKeeper.keepAccessToken(ResultView.this,
