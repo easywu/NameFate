@@ -31,14 +31,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout.LayoutParams;
+
+import com.google.ads.*;
 
 public class ResultView extends Activity {
+	RelativeLayout mainRL;
 	ShowView sv;
 	Canvas c;
 	int i=0;
@@ -52,6 +57,7 @@ public class ResultView extends Activity {
 	public static Oauth2AccessToken accessToken;
 	private TextView mText;
 	public static final String TAG = "sinasdk";
+	private AdView adView;
 
 
     @Override
@@ -90,8 +96,7 @@ public class ResultView extends Activity {
 		
 		c=new Canvas();
 		sv.setBackgroundResource(R.drawable.mainback);
-		setContentView(sv);
-		
+
 		t=new Timer();
 		t.schedule(new TimerTask() {
 	          @Override
@@ -118,6 +123,18 @@ public class ResultView extends Activity {
 	                   }
                                      });}
 	          }, 0, 100); 
+		
+		mainRL = new RelativeLayout(this);
+		mainRL.addView(sv);
+		
+		/*添加Google Admob*/
+		adView = new AdView(this, AdSize.BANNER, "a1526fb98491f2e");
+		LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		mainRL.addView(adView, params);
+		adView.loadAd(new AdRequest());
+		
+		setContentView(mainRL);
 		
    }
     

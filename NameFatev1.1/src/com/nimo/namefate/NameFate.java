@@ -21,8 +21,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
+import com.google.ads.*;
+
 
 
 
@@ -35,6 +37,7 @@ public class NameFate extends Activity {
 	Button btn;
 	private final int FP = ViewGroup.LayoutParams.FILL_PARENT;
 	private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
+	private AdView adView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -155,10 +158,16 @@ public class NameFate extends Activity {
 		rl2.addView(btn, btn_param);
 		
 		mainRL.addView(rl1, rl1_param);
-		setContentView(mainRL);
 
-		//加入广告加载方法
-		//addCaseeViewAD(this);
+
+		/*添加Google Admob*/
+		adView = new AdView(this, AdSize.BANNER, "a1526fb98491f2e");
+		LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		mainRL.addView(adView, params);
+		adView.loadAd(new AdRequest());
+		
+		setContentView(mainRL);
 
 	}
 
