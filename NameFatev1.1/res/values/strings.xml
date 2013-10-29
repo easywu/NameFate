@@ -2,9 +2,9 @@
 <resources>
     <string name="hello">Hello World, NameFate!</string>
     <string name="app_name">&#x59D3;&#x540D;&#x6D4B;&#x7F18;</string>
-    <string name="about">about</string>
+    <string name="about">&#x5173;&#x4E8E;</string>
     <string name="name1">&#x59D3;&#x540D;&#x4E00;&#xFF1A;</string>
     <string name="name2">&#x59D3;&#x540D;&#x4E8C;&#xFF1A;</string>
     <string name="cacu">&#x7B97;&#x7B97;&#x7F18;&#x5206;</string>
-    <string name="share">&#x5206;&#x4EAB;&#x5230;&#x65B0;&#x6D6A;&#x5FAE;&#x535A;</string>
+    <string name="share">&#x5206;&#x4EAB;</string>
 </resources>
