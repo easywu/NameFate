@@ -3,11 +3,14 @@ package com.nimo.namefate;
 //测试git push
 //测试git push 2
 
+import java.io.File;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -20,6 +23,7 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
@@ -31,10 +35,10 @@ import com.google.ads.*;
 
 public class NameFate extends Activity {
 	/** Called when the activity is first created. */
-	RelativeLayout mainRL, rl1, rl2;
-	TextView male, female;
+	RelativeLayout mainRL, centerRL, topRL, rl1, rl2;
+	TextView male, female, title;
 	EditText maleName, femaleName;
-	Button btn;
+	Button btn, btn_shareApp;
 	private final int FP = ViewGroup.LayoutParams.FILL_PARENT;
 	private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
 	private AdView adView;
@@ -49,8 +53,7 @@ public class NameFate extends Activity {
 				if(v.getId() == 14){//“全部”按钮
 					String temp1=maleName.getText().toString();
 					String temp2=femaleName.getText().toString();
-					System.out.println("From NameFate: maleName is : "+maleName);
-					System.out.println("From NameFate: femaleName is : "+femaleName);
+
 					if(temp1.equals(null)|| temp1.equals("")
 							||temp2.equals(null)||temp2.equals(""))
 					{
@@ -75,16 +78,19 @@ public class NameFate extends Activity {
 					    intent.putExtras(bundle); 
 						startActivity(intent);
 					}
-					
-					
-					 
-					 //finish(); 
+    				 //finish(); 
 				}
-
+				else 	if(v.getId() == 111){ 
+					  Intent intent=new Intent(Intent.ACTION_SEND);
+					  intent.setType("text/plain");
+					  intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+					  intent.putExtra(Intent.EXTRA_TEXT, "最近下了一个应用可以通过姓名测试两个人的缘分，很有意思，下载地址：http://www.blogjava.net/Files/easywu/NameFate_v2.0.apk");
+	                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					  startActivity(Intent.createChooser(intent, "将结果分享给好友："));
+				}
 			}
-				
 		};
-
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -95,16 +101,46 @@ public class NameFate extends Activity {
 		int w = displayMetrics.widthPixels;
 
 		mainRL = new RelativeLayout(this);
-		mainRL.setBackgroundResource(R.drawable.mainback);
-
-		rl1 = new RelativeLayout(this);
+		
+		topRL = new RelativeLayout(this);//topRL用来顶部的导航栏及按钮。
+		topRL.setBackgroundColor(Color.parseColor("#FFF2CC"));
+		topRL.setId(110);
+		RelativeLayout.LayoutParams topRL_param = new RelativeLayout.LayoutParams(FP, WC);
+		topRL_param.addRule(RelativeLayout.ALIGN_TOP);
+		mainRL.addView(topRL, topRL_param);
+		
+		Button btn_shareApp = new Button(this);
+		btn_shareApp.setBackgroundColor(Color.parseColor("#FFE9AB"));
+		btn_shareApp.setText("分享应用");
+		btn_shareApp.setId(111);
+		btn_shareApp.setOnClickListener(listener);
+		RelativeLayout.LayoutParams btn_shareApp_param = new RelativeLayout.LayoutParams(WC, WC);
+		btn_shareApp_param.addRule(RelativeLayout.ALIGN_LEFT);
+		topRL.addView(btn_shareApp,btn_shareApp_param);
+		
+		TextView title = new TextView(this);
+		title.setText("姓名测缘");
+		title.setTextSize(20f);
+		title.setTextColor(Color.BLACK);
+		title.setId(112);
+		RelativeLayout.LayoutParams title_param = new RelativeLayout.LayoutParams(
+				WC, WC);
+		title_param.addRule(RelativeLayout.CENTER_IN_PARENT);
+		topRL.addView(title, title_param);
+	
+		centerRL = new RelativeLayout(this);
+		centerRL.setBackgroundResource(R.drawable.mainback);
+		RelativeLayout.LayoutParams centerRL_param = new RelativeLayout.LayoutParams(FP, FP);
+		centerRL_param.addRule(RelativeLayout.BELOW,110);
+		mainRL.addView(centerRL,centerRL_param);
+		
+		rl1 = new RelativeLayout(this);//截一个同屏宽，4/5高的区域放在屏幕中间。
 		RelativeLayout.LayoutParams rl1_param = new RelativeLayout.LayoutParams(
 				FP, h / 5 * 4);
 		// rl1_param.addRule(RelativeLayout.);
 		rl1_param.addRule(RelativeLayout.CENTER_IN_PARENT);
-		
 
-		rl2 = new RelativeLayout(this);
+		rl2 = new RelativeLayout(this);//在rl1里面在截一个2/3宽，和rl1同高的区域出来放在中间，这个区域用来放TextView、EditView、Button部件。
 		RelativeLayout.LayoutParams rl2_param = new RelativeLayout.LayoutParams(
 				w / 3 * 2, FP);
 		rl2_param.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -157,7 +193,9 @@ public class NameFate extends Activity {
 		btn_param.addRule(RelativeLayout.BELOW, 13);
 		rl2.addView(btn, btn_param);
 		
-		mainRL.addView(rl1, rl1_param);
+		
+		
+		centerRL.addView(rl1, rl1_param);
 
 
 		/*添加Google Admob*/
@@ -230,15 +268,7 @@ public class NameFate extends Activity {
 	        });
 		    dialog.show();
 		    break;
-		case R.id.share:
-			 Intent intent=new Intent(Intent.ACTION_SEND);
-		      
-		      intent.setType("text/plain");
-		      intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
-		      intent.putExtra(Intent.EXTRA_TEXT, "测试共享内容！");
-		      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		      startActivity(Intent.createChooser(intent, getTitle()));
-		      return true;
+
 		}
 		return true;
 	}

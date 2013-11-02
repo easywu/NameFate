@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,11 +21,17 @@ import com.weibo.sdk.android.net.RequestListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -34,6 +42,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -43,7 +53,10 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.google.ads.*;
 
 public class ResultView extends Activity {
-	RelativeLayout mainRL;
+	RelativeLayout mainRL,centerRL, topRL;
+	TextView title;
+	private Button btn_shareApp;
+	private Button btn_shareScore;
 	ShowView sv;
 	Canvas c;
 	int i=0;
@@ -52,17 +65,45 @@ public class ResultView extends Activity {
 	int maleStroke,femaleStroke;
 	int finalScore=0;
 	RelativeLayout rl;
+	private final int FP = ViewGroup.LayoutParams.FILL_PARENT;
+	private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
 	ScrollView m_ScrollView;
 	Weibo mWeibo;
 	public static Oauth2AccessToken accessToken;
 	private TextView mText;
 	public static final String TAG = "sinasdk";
 	private AdView adView;
+	private int AdHeight;
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+		//处理按钮事件。
+        OnClickListener listener = new OnClickListener() {
+			public void onClick(View v) {
+				if(v.getId() == 111){//“分享应用”按钮
+					  Intent intent=new Intent(Intent.ACTION_SEND);
+					  intent.setType("text/plain");
+					  intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+					  intent.putExtra(Intent.EXTRA_TEXT, "最近下了一个应用可以通过姓名测试两个人的缘分，很有意思，下载地址：http://www.blogjava.net/Files/easywu/NameFate_v2.0.apk");
+	                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					  startActivity(Intent.createChooser(intent, "将结果分享给好友："));
+				}
+				else 	if(v.getId() == 112){ //“分享结果”按钮
+					 saveToSD();
+					 Intent intent=new Intent(Intent.ACTION_SEND);
+					 File file = new File("mnt/sdcard/testfile.png");
+					 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file)); 
+					 intent.setType("image/*");
+					 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					 startActivity(Intent.createChooser(intent, "将结果分享给好友："));
+				}
+			}
+		};
+		
         
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -96,6 +137,9 @@ public class ResultView extends Activity {
 		
 		c=new Canvas();
 		sv.setBackgroundResource(R.drawable.mainback);
+		
+		btn_shareApp = new Button(this);
+		btn_shareScore = new Button(this);
 
 		t=new Timer();
 		t.schedule(new TimerTask() {
@@ -103,9 +147,7 @@ public class ResultView extends Activity {
 	          public void run() {
 	               ResultView.this.runOnUiThread(new Runnable() {
 	                   public void run() {
-	                	   
-	                	 
-	                	   if (i<=finalScore)
+                    	   if (i<=finalScore)
 	    	                {
 	                		   sv.setKey(i);
 	                		   //sv.onDraw(c);
@@ -118,6 +160,8 @@ public class ResultView extends Activity {
 	                	   {
 	                			sv.setCtitle(Comment.c_title[(100-finalScore)/2]);
 	                			sv.setCcontent(Comment.c_content[(100-finalScore)/2]);
+	                			btn_shareApp.setClickable(true);
+	                			btn_shareScore.setClickable(true);
 	                	   }
    
 	                   }
@@ -125,13 +169,60 @@ public class ResultView extends Activity {
 	          }, 0, 100); 
 		
 		mainRL = new RelativeLayout(this);
-		mainRL.addView(sv);
+		
+		topRL = new RelativeLayout(this);//topRL用来顶部的导航栏及按钮。
+		topRL.setBackgroundColor(Color.parseColor("#FFF2CC"));
+		topRL.setId(110);
+		RelativeLayout.LayoutParams topRL_param = new RelativeLayout.LayoutParams(FP, WC);
+		topRL_param.addRule(RelativeLayout.ALIGN_TOP);
+		mainRL.addView(topRL, topRL_param);
+		
+		//Button btn_shareApp = new Button(this);
+		btn_shareApp.setBackgroundColor(Color.parseColor("#FFE9AB"));
+		btn_shareApp.setText("分享应用");
+		btn_shareApp.setId(111);
+		btn_shareApp.setOnClickListener(listener);
+		btn_shareApp.setClickable(false);
+		
+		RelativeLayout.LayoutParams btn_shareApp_param = new RelativeLayout.LayoutParams(WC, WC);
+		btn_shareApp_param.addRule(RelativeLayout.ALIGN_LEFT);
+		topRL.addView(btn_shareApp,btn_shareApp_param);
+		
+		TextView title = new TextView(this);
+		title.setText("姓名测缘");
+		title.setTextSize(20f);
+		title.setTextColor(Color.BLACK);
+		title.setId(112);
+		RelativeLayout.LayoutParams title_param = new RelativeLayout.LayoutParams(
+				WC, WC);
+		title_param.addRule(RelativeLayout.CENTER_IN_PARENT);
+		topRL.addView(title, title_param);
+		
+		//Button btn_shareScore = new Button(this);
+		btn_shareScore.setBackgroundColor(Color.parseColor("#FFE9AB"));
+		btn_shareScore.setText("分享结果");
+		btn_shareScore.setId(112);
+		btn_shareScore.setOnClickListener(listener);
+		btn_shareScore.setClickable(false);
+		RelativeLayout.LayoutParams btn_shareScore_param = new RelativeLayout.LayoutParams(WC, WC);
+		btn_shareScore_param.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		topRL.addView(btn_shareScore,btn_shareScore_param);
+		
+		centerRL = new RelativeLayout(this);
+		centerRL.setBackgroundResource(R.drawable.mainback);
+		RelativeLayout.LayoutParams centerRL_param = new RelativeLayout.LayoutParams(FP, FP);
+		centerRL_param.addRule(RelativeLayout.BELOW,110);
+		mainRL.addView(centerRL,centerRL_param);
+		
+		centerRL.addView(sv);
 		
 		/*添加Google Admob*/
 		adView = new AdView(this, AdSize.BANNER, "a1526fb98491f2e");
+		AdHeight=AdSize.BANNER.getHeight();//获取广告条的高度。
+		System.out.println("AdHeight is :"+AdHeight);
 		LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		mainRL.addView(adView, params);
+		centerRL.addView(adView, params);
 		adView.loadAd(new AdRequest());
 		
 		setContentView(mainRL);
@@ -238,8 +329,9 @@ public class ResultView extends Activity {
 	      dialog.show();
 	   break;
 	   
-	  case R.id.share:
+	  //case R.id.share:
 	   //启动分享
+		  /*
 	   mWeibo=Weibo.getInstance("3200369891", "http://www.weibo.com");
 	   mWeibo.authorize(ResultView.this, new AuthDialogListener());
 	   StatusesAPI api = new StatusesAPI(ResultView.accessToken);
@@ -257,8 +349,34 @@ public class ResultView extends Activity {
 	   });
 	   
 	   saveToSD();
-	   break;
-
+	   */
+		  
+	//	  saveToSD();
+		 // Intent intent=new Intent(Intent.ACTION_SEND_MULTIPLE);
+	//	  Intent intent=new Intent(Intent.ACTION_SEND);
+		//  if (hasApplication(intent)){//判断系统中是否有可以用于分享的应用如微博。
+		      //intent.setType("text/plain");
+		      //intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+		      //intent.putExtra(Intent.EXTRA_TEXT, "测试共享内容！");
+		  //    File file1 = new File("mnt/sdcard/shareTxt.txt");
+		    //  File file2 = new File("mnt/sdcard/testfile.png");
+		    //  ArrayList<Uri> _content = new ArrayList<Uri>();
+		     // _content.add(Uri.fromFile(file1));
+		     // _content.add(Uri.fromFile(file2)); // Add your image URIs here
+		    //  intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, _content);	      
+		     // intent.setType("*/*");
+		     // intent.cr
+	//	      File file = new File("mnt/sdcard/testfile.png");
+	//	      intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file)); 
+	//	      intent.setType("image/*");
+		      //intent.putExtra(Intent.EXTRA_TEXT, "测试共享内容！"); 
+	//	      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	//	      startActivity(Intent.createChooser(intent, "将结果分享给好友："));
+		      
+	//	      return true;
+		//  }
+        // break;
+	   
 		}
 		return true;
 	}
@@ -266,21 +384,22 @@ public class ResultView extends Activity {
 	private Bitmap shot() {//截屏的方法   
 	      View views = getWindow().getDecorView(); 
 	      views.buildDrawingCache(); 
-	   
 	      // 获取状态栏高度 
 	      Rect frames = new Rect(); 
 	      views.getWindowVisibleDisplayFrame(frames); 
-	      int statusBarHeights = frames.top; 
+	     // int statusBarHeights = frames.top-topRL.getHeight(); 
 	      Display display = getWindowManager().getDefaultDisplay(); 
 	      int widths = display.getWidth(); 
 	      int heights = display.getHeight(); 
 	      //第一种方式      
-	      views.layout(0, statusBarHeights,widths, heights - statusBarHeights); 
+	      //views.layout(0, statusBarHeights,widths, heights - statusBarHeights-AdHeight); 
+	      //views.layout(0,40,widths, heights-AdHeight+topRL.getHeight()); 
+	      //System.out.println("topRL is: "+topRL.getHeight());
 	      views.setDrawingCacheEnabled(true);//允许当前窗口保存缓存信息，两种方式都需要加上 
-	      Bitmap bmp = Bitmap.createBitmap(views.getDrawingCache()); 
+	      //Bitmap bmp = Bitmap.createBitmap(views.getDrawingCache()); 
 	      //第二种方式      
 	      // 1、source 位图  2、X x坐标的第一个像素  3、Y y坐标的第一个像素  4、宽度的像素在每一行  5、高度的行数 
-	      //Bitmap bmp = Bitmap.createBitmap(views.getDrawingCache(), 0, statusBarHeights,widths, heights - statusBarHeights); 
+	      Bitmap bmp = Bitmap.createBitmap(views.getDrawingCache(), 0, topRL.getHeight(),widths, heights - topRL.getHeight()-AdHeight); 
 	      System.out.println("here 3！！！！！！！！！！！！！！！！！！！");
 	      return bmp;   
 	      
@@ -305,6 +424,13 @@ public class ResultView extends Activity {
 		               out.close(); 
 		               System.out.println("here 4！！！！！！！！！！！！！！！！！！！");
 		           //} 
+		           
+		           File textFile = new File(Environment.getExternalStorageDirectory(),"shareTxt.txt"); 
+		           FileOutputStream textOut = new FileOutputStream(textFile); 
+	               String shareText="测试共享内容！";
+		           textOut.write(shareText.getBytes());
+		           textOut.close();
+		               
 		       } 
 		   } catch (FileNotFoundException e) { 
 		       e.printStackTrace(); 
@@ -312,7 +438,17 @@ public class ResultView extends Activity {
 		       e.printStackTrace(); 
 		   } 
 		  }  
-	
+	 
+	 public boolean hasApplication(Intent intent){  //判断系统中是否有可以用于分享的应用如微博。
+	        PackageManager packageManager = getPackageManager();  
+	        //查询是否有该Intent的Activity  
+	        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);  
+	        //activities里面不为空就有，否则就没有  
+	        return activities.size() > 0 ? true : false;  	 
+	 
+	 
+	 
+/*	
 	 class AuthDialogListener implements WeiboAuthListener {
 	        @Override
 	        public void onComplete(Bundle values) {
@@ -398,6 +534,7 @@ public class ResultView extends Activity {
 	        }
 
 	    }
-	 
+	 */
    
+}
 }
