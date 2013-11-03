@@ -3,7 +3,6 @@ package com.nimo.namefate;
 //V2.0增加了应用分享和缘分测试结果分享功能，同时去掉了架势广告，改成了谷歌广告。
 //V2.1增加了cnzz应用统计的功能。
 
-import java.io.File;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
