@@ -1,16 +1,14 @@
 package com.nimo.namefate;
 //这是Namefate的第二个版本。
-//测试git push
-//测试git push 2
+//V2.0增加了应用分享和缘分测试结果分享功能，同时去掉了架势广告，改成了谷歌广告。
+//V2.1增加了cnzz应用统计的功能。
 
 import java.io.File;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -23,14 +21,10 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
 import com.google.ads.*;
-
-
-
 
 
 public class NameFate extends Activity {

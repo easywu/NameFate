@@ -7,5 +7,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="lib" path="D:/dev2/scott/git/NameFate/NameFatev1.1/libs/weibo.sdk.android.sso.jar"/>
 	<classpathentry exported="true" kind="lib" path="D:/dev2/scott/git/NameFate/NameFatev1.1/libs/GoogleAdMobAdsSdk-6.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/dev2/scott/git/NameFate/NameFatev1.1/libs/MobileProbe.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
