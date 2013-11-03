@@ -95,7 +95,7 @@ public class ResultView extends Activity {
 				else 	if(v.getId() == 112){ //“分享结果”按钮
 					 saveToSD();
 					 Intent intent=new Intent(Intent.ACTION_SEND);
-					 File file = new File("mnt/sdcard/testfile.png");
+					 File file = new File("mnt/sdcard/namefate.png");
 					 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file)); 
 					 intent.setType("image/*");
 					 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -328,55 +328,6 @@ public class ResultView extends Activity {
 	         });
 	      dialog.show();
 	   break;
-	   
-	  //case R.id.share:
-	   //启动分享
-		  /*
-	   mWeibo=Weibo.getInstance("3200369891", "http://www.weibo.com");
-	   mWeibo.authorize(ResultView.this, new AuthDialogListener());
-	   StatusesAPI api = new StatusesAPI(ResultView.accessToken);
-	   api.update("测试微博", "90.00", "90.00", new RequestListener(){
-	    @Override
-	    public void onIOException(IOException arg0){
-	    }
-	    @Override
-	    public void onError(WeiboException arg0){
-	    }
-	    
-	    @Override
-	    public void onComplete(String arg0){
-	    }
-	   });
-	   
-	   saveToSD();
-	   */
-		  
-	//	  saveToSD();
-		 // Intent intent=new Intent(Intent.ACTION_SEND_MULTIPLE);
-	//	  Intent intent=new Intent(Intent.ACTION_SEND);
-		//  if (hasApplication(intent)){//判断系统中是否有可以用于分享的应用如微博。
-		      //intent.setType("text/plain");
-		      //intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
-		      //intent.putExtra(Intent.EXTRA_TEXT, "测试共享内容！");
-		  //    File file1 = new File("mnt/sdcard/shareTxt.txt");
-		    //  File file2 = new File("mnt/sdcard/testfile.png");
-		    //  ArrayList<Uri> _content = new ArrayList<Uri>();
-		     // _content.add(Uri.fromFile(file1));
-		     // _content.add(Uri.fromFile(file2)); // Add your image URIs here
-		    //  intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, _content);	      
-		     // intent.setType("*/*");
-		     // intent.cr
-	//	      File file = new File("mnt/sdcard/testfile.png");
-	//	      intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file)); 
-	//	      intent.setType("image/*");
-		      //intent.putExtra(Intent.EXTRA_TEXT, "测试共享内容！"); 
-	//	      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	//	      startActivity(Intent.createChooser(intent, "将结果分享给好友："));
-		      
-	//	      return true;
-		//  }
-        // break;
-	   
 		}
 		return true;
 	}
@@ -411,7 +362,7 @@ public class ResultView extends Activity {
 		       // 判SD卡是否存在 
 		       System.out.println("status is : "+Environment.MEDIA_MOUNTED);
 		       if (status.equals(Environment.MEDIA_MOUNTED)) { 
-                   File file = new File(Environment.getExternalStorageDirectory(),"testfile.png"); 
+                   File file = new File(Environment.getExternalStorageDirectory(),"namefate.png"); 
 		           System.out.println("Environment is : "+ Environment.getExternalStorageDirectory());
 		           // 判断文件A是否存在 
 		           //if (file.exists()) { 
@@ -425,11 +376,7 @@ public class ResultView extends Activity {
 		               System.out.println("here 4！！！！！！！！！！！！！！！！！！！");
 		           //} 
 		           
-		           File textFile = new File(Environment.getExternalStorageDirectory(),"shareTxt.txt"); 
-		           FileOutputStream textOut = new FileOutputStream(textFile); 
-	               String shareText="测试共享内容！";
-		           textOut.write(shareText.getBytes());
-		           textOut.close();
+		        
 		               
 		       } 
 		   } catch (FileNotFoundException e) { 
