@@ -86,7 +86,7 @@ public class NameFate extends Activity {
 					  intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
 					  intent.putExtra(Intent.EXTRA_TEXT, "最近下了一个应用可以通过姓名测试两个人的缘分，很有意思，下载地址：http://www.blogjava.net/Files/easywu/NameFate_v2.0.apk");
 	                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					  startActivity(Intent.createChooser(intent, "将结果分享给好友："));
+					  startActivity(Intent.createChooser(intent, "分享给好友："));
 				}
 			}
 		};
@@ -254,8 +254,8 @@ public class NameFate extends Activity {
 			AlertDialog dialog = new AlertDialog.Builder(NameFate.this).create();
 			dialog.setTitle("姓名测缘");//设置标题
 			dialog.setMessage("\n\n" +
-					"姓名测缘 v1.1 \n" +
-					"Copyright by Scott Wu 2011. \n\n" +
+					"姓名测缘 v2.0 \n" +
+					"Copyright by Scott Wu 2013. \n\n" +
 					
 					"使用意见或建议请联系easywu@126.com \n\n");//设置内容
 			dialog.setButton("确定",//设置确定按钮
