@@ -59,23 +59,23 @@ public class ShowView extends View {
 			p.setColor(Color.BLACK);
 			p.setTextSize(12f);
 			p.setTextAlign(Align.LEFT);
-			c.drawText(maleName+" 和 "+femaleName+ "," ,w/20,h/2-40, p);
-			c.drawText("你们的缘份值是...",w/20,h/2-25, p);	
-			c.drawText("（满分为100分）",w/20,h/2-10, p);	
+			c.drawText(maleName+" 和 "+femaleName+ "," ,w/20,h/2-50, p);
+			c.drawText("你们的缘份值是...",w/20,h/2-35, p);	
+			c.drawText("（满分为100分）",w/20,h/2-20, p);	
 
             p.setColor(Color.RED);
             p.setTextAlign(Align.CENTER);
             p.setTextSize(50f);
-			c.drawText(Integer.toString(key),w/2,h/2+15,p);
+			c.drawText(Integer.toString(key),w/2,h/2-5,p);
 			
 			p.setColor(Color.BLUE);
-			c.drawLine(0, h/2+25, w, h/2+25, p);
+			c.drawLine(0, h/2+5, w, h/2+5, p);
 			
             p.setColor(Color.BLACK);
             p.setTextAlign(Align.CENTER);
             p.setStyle(Paint.Style.STROKE);
             p.setTextSize(20f);
-			c.drawText(c_title,w/2,h/2+50,p);
+			c.drawText(c_title,w/2,h/2+30,p);
 			
             
 			
@@ -95,12 +95,12 @@ public class ShowView extends View {
             	
             	if (line_width_temp<s_temp.length())
             	{
-            		c.drawText(s_temp.substring(0, line_width_temp-1),5,h/2+50+25+25*i,p);
+            		c.drawText(s_temp.substring(0, line_width_temp-1),5,h/2+30+25+20*i,p);
             		s_temp=s_temp.substring(line_width_temp-1, s_temp.length());
                	}
             	else
             	{
-            		c.drawText(s_temp.substring(0, line_width_temp),5,h/2+50+25+25*i,p);
+            		c.drawText(s_temp.substring(0, line_width_temp),5,h/2+30+25+20*i,p);
             		s_temp="";
             	}
                 System.out.println("s_temp is : "+s_temp);

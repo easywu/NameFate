@@ -50,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.cnzz.mobile.android.sdk.MobileProbe;
 import com.google.ads.*;
 
 public class ResultView extends Activity {
@@ -85,14 +86,16 @@ public class ResultView extends Activity {
         OnClickListener listener = new OnClickListener() {
 			public void onClick(View v) {
 				if(v.getId() == 111){//“分享应用”按钮
+					  MobileProbe.onEvent(ResultView.this,"结果页分享应用按钮",0);//记录点击结果页分享应用按钮的次数cnzz
 					  Intent intent=new Intent(Intent.ACTION_SEND);
 					  intent.setType("text/plain");
 					  intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
-					  intent.putExtra(Intent.EXTRA_TEXT, "最近下了一个应用可以通过姓名测试两个人的缘分，很有意思，下载地址：http://www.blogjava.net/Files/easywu/NameFate_v2.0.apk");
+					  intent.putExtra(Intent.EXTRA_TEXT, "最近下了一个应用可以通过姓名测试两个人的缘分，很有意思，下载地址：http://www.blogjava.net/Files/easywu/NameFate_v2.1.apk");
 	                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					  startActivity(Intent.createChooser(intent, "分享给好友："));
 				}
 				else 	if(v.getId() == 112){ //“分享结果”按钮
+					 MobileProbe.onEvent(ResultView.this,"结果页分享结果按钮",0);//记录点击结果页分享结果按钮的次数cnzz
 					 saveToSD();
 					 Intent intent=new Intent(Intent.ACTION_SEND);
 					 File file = new File("mnt/sdcard/namefate.png");
@@ -217,6 +220,7 @@ public class ResultView extends Activity {
 		centerRL.addView(sv);
 		
 		/*添加Google Admob*/
+		MobileProbe.onEventBegin(this, "结果页调用谷歌广告");//计算结果页调用谷歌广告的时间_开始cnzz
 		adView = new AdView(this, AdSize.BANNER, "a1526fb98491f2e");
 		AdHeight=AdSize.BANNER.getHeight();//获取广告条的高度。
 		System.out.println("AdHeight is :"+AdHeight);
@@ -224,7 +228,7 @@ public class ResultView extends Activity {
 		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		centerRL.addView(adView, params);
 		adView.loadAd(new AdRequest());
-		
+		MobileProbe.onEventEnd(this, "结果页调用谷歌广告");//计算结果页调用谷歌广告的时间_开始cnzz
 		setContentView(mainRL);
 		
    }
@@ -285,12 +289,14 @@ public class ResultView extends Activity {
 
 	public void onResume() {
 		super.onResume();
+		MobileProbe.onResume(this, "结果页");
 	}
     
     @Override
     public void onPause(){//按下房屋键时会执行该回调函数。停止Timer。
     	super.onStop();
     	t.cancel();
+    	MobileProbe.onPause(this, "结果页");
     	//t.purge();
     }
     
@@ -310,10 +316,11 @@ public class ResultView extends Activity {
 	  {
 	  case R.id.about:
 	   //启动About
+	   MobileProbe.onEvent(ResultView.this,"结果页关于按钮",0);//记录点击结果页关于按钮的次数cnzz
 	   AlertDialog dialog = new AlertDialog.Builder(ResultView.this).create();
 	   dialog.setTitle("姓名测缘");//设置标题
 	   dialog.setMessage("\n\n" +
-	     "姓名测缘 v2.0 \n" +
+	     "姓名测缘 v2.1 \n" +
 	     "Copyright by Scott Wu 2013. \n\n" +
 	     
 	     "使用意见或建议请联系easywu@126.com \n\n");//设置内容

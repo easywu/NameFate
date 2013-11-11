@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
+
+import com.cnzz.mobile.android.sdk.MobileProbe;
 import com.google.ads.*;
 
 
@@ -43,7 +45,8 @@ public class NameFate extends Activity {
 		//处理按钮事件。
 		OnClickListener listener = new OnClickListener() {
 			public void onClick(View v) {
-				if(v.getId() == 14){//“全部”按钮
+				if(v.getId() == 14){//“计算结果”按钮
+					MobileProbe.onEvent(NameFate.this,"首页计算结果按钮",0);//记录点击首页计算结果按钮的次数cnzz
 					String temp1=maleName.getText().toString();
 					String temp2=femaleName.getText().toString();
 
@@ -74,10 +77,11 @@ public class NameFate extends Activity {
     				 //finish(); 
 				}
 				else 	if(v.getId() == 111){ 
+					  MobileProbe.onEvent(NameFate.this,"首页分享应用按钮",0);//记录点击首页分享应用按钮的次数cnzz
 					  Intent intent=new Intent(Intent.ACTION_SEND);
 					  intent.setType("text/plain");
 					  intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
-					  intent.putExtra(Intent.EXTRA_TEXT, "最近下了一个应用可以通过姓名测试两个人的缘分，很有意思，下载地址：http://www.blogjava.net/Files/easywu/NameFate_v2.0.apk");
+					  intent.putExtra(Intent.EXTRA_TEXT, "最近下了一个应用可以通过姓名测试两个人的缘分，很有意思，下载地址：http://www.blogjava.net/Files/easywu/NameFate_v2.1.apk");
 	                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					  startActivity(Intent.createChooser(intent, "分享给好友："));
 				}
@@ -130,12 +134,12 @@ public class NameFate extends Activity {
 		rl1 = new RelativeLayout(this);//截一个同屏宽，4/5高的区域放在屏幕中间。
 		RelativeLayout.LayoutParams rl1_param = new RelativeLayout.LayoutParams(
 				FP, h / 5 * 4);
-		// rl1_param.addRule(RelativeLayout.);
-		rl1_param.addRule(RelativeLayout.CENTER_IN_PARENT);
+		rl1_param.addRule(RelativeLayout.ABOVE);
+		//rl1_param.addRule(RelativeLayout.CENTER_IN_PARENT);
 
 		rl2 = new RelativeLayout(this);//在rl1里面在截一个2/3宽，和rl1同高的区域出来放在中间，这个区域用来放TextView、EditView、Button部件。
 		RelativeLayout.LayoutParams rl2_param = new RelativeLayout.LayoutParams(
-				w / 3 * 2, FP);
+				w / 3 * 2,FP);
 		rl2_param.addRule(RelativeLayout.CENTER_IN_PARENT);
 		rl1.addView(rl2, rl2_param);
 
@@ -192,12 +196,13 @@ public class NameFate extends Activity {
 
 
 		/*添加Google Admob*/
+		MobileProbe.onEventBegin(this, "首页调用谷歌广告");//计算首页调用谷歌广告的时间_开始cnzz
 		adView = new AdView(this, AdSize.BANNER, "a1526fb98491f2e");
 		LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		mainRL.addView(adView, params);
 		adView.loadAd(new AdRequest());
-		
+		MobileProbe.onEventEnd(this, "首页调用谷歌广告");//计算首页调用谷歌广告的时间_结束cnzz
 		setContentView(mainRL);
 
 	}
@@ -211,15 +216,14 @@ public class NameFate extends Activity {
 	}
 
 	public void onResume() {
-		
-	
 		super.onResume();
+		MobileProbe.onResume(this, "首页");
+		
 	}
 
 	public void onPause() {
-		
-	
 		super.onPause();
+		MobileProbe.onPause(this, "首页");
 	}
 
 	public void onStop() {
@@ -244,10 +248,11 @@ public class NameFate extends Activity {
 		{
 		case R.id.about:
 			//启动About
+			MobileProbe.onEvent(NameFate.this,"首页关于按钮",0);//记录点击首页关于按钮的次数cnzz
 			AlertDialog dialog = new AlertDialog.Builder(NameFate.this).create();
 			dialog.setTitle("姓名测缘");//设置标题
 			dialog.setMessage("\n\n" +
-					"姓名测缘 v2.0 \n" +
+					"姓名测缘 v2.1 \n" +
 					"Copyright by Scott Wu 2013. \n\n" +
 					
 					"使用意见或建议请联系easywu@126.com \n\n");//设置内容
